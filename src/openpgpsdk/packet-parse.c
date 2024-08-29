@@ -841,7 +841,8 @@ void ops_parser_content_free(ops_parser_content_t *c)
       case OPS_PTAG_CT_SE_IP_DATA_BODY:
       case OPS_PTAG_CT_MDC:
       case OPS_PARSER_CMD_GET_SECRET_KEY:
-	 break;
+      case OPS_PTAG_SS_ISSUER_FINGERPRINT:
+     break;
 
       case OPS_PTAG_CT_SIGNED_CLEARTEXT_HEADER:
 	 ops_headers_free(&c->content.signed_cleartext_header.headers);
@@ -1574,10 +1575,10 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
 	break;
 
     case OPS_PTAG_SS_ISSUER_KEY_ID:
-	if(!limited_read(C.ss_issuer_key_id.key_id,OPS_KEY_ID_SIZE,
+    if(!limited_read(C.ss_issuer_key_id.key_id,OPS_KEY_ID_SIZE,
 			     &subregion,pinfo))
 	    return 0;
-	memcpy(sig->info.signer_id,C.ss_issuer_key_id.key_id,OPS_KEY_ID_SIZE);
+    memcpy(sig->info.signer_id,C.ss_issuer_key_id.key_id,OPS_KEY_ID_SIZE);
 	sig->info.signer_id_set=ops_true;
 	break;
 
@@ -1606,6 +1607,31 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
 	if(!read_data(&C.ss_key_flags.data,&subregion,pinfo))
 	    return 0;
 	break;
+
+    case OPS_PTAG_SS_ISSUER_FINGERPRINT:
+    {
+        printf("Subregion.length = %d\n",subregion.length);
+
+        unsigned char v_number;
+
+        if(!limited_read(&v_number,1, &subregion,pinfo))
+            return 0;
+
+        if(v_number != 4)
+        {
+            OPS_ERROR_1(&pinfo->errors, OPS_E_PROTO_CRITICAL_SS_IGNORED, "Unhandled signature issuer fingerprint packet type (%d)", v_number);
+            return 0;
+        }
+
+        if(!limited_read(C.ss_issuer_fingerprint.fingerprint,OPS_FINGERPRINT_SIZE, &subregion,pinfo))
+            return 0;
+
+        printf("Subregion.length_read = %d, version = %d\n",subregion.length_read,v_number);
+        memcpy(sig->info.issuer_fingerprint.fingerprint,C.ss_issuer_fingerprint.fingerprint,OPS_FINGERPRINT_SIZE);
+
+        sig->info.issuer_fingerprint.length=OPS_FINGERPRINT_SIZE;
+    }
+    break;
 
     case OPS_PTAG_SS_KEY_SERVER_PREFS:
 	if(!read_data(&C.ss_key_server_prefs.data,&subregion,pinfo))
