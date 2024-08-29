@@ -1610,8 +1610,6 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
 
     case OPS_PTAG_SS_ISSUER_FINGERPRINT:
     {
-        printf("Subregion.length = %d\n",subregion.length);
-
         unsigned char v_number;
 
         if(!limited_read(&v_number,1, &subregion,pinfo))
@@ -1626,7 +1624,6 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
         if(!limited_read(C.ss_issuer_fingerprint.fingerprint,OPS_FINGERPRINT_SIZE, &subregion,pinfo))
             return 0;
 
-        printf("Subregion.length_read = %d, version = %d\n",subregion.length_read,v_number);
         memcpy(sig->info.issuer_fingerprint.fingerprint,C.ss_issuer_fingerprint.fingerprint,OPS_FINGERPRINT_SIZE);
 
         sig->info.issuer_fingerprint.length=OPS_FINGERPRINT_SIZE;
