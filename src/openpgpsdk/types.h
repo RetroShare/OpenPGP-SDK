@@ -117,6 +117,7 @@ enum ops_content_tag_t
     OPS_PTAG_SS_FEATURES		=0x200+30, /*!< features */
     OPS_PTAG_SS_SIGNATURE_TARGET =0x200+31, /*!< signature target */
     OPS_PTAG_SS_EMBEDDED_SIGNATURE=0x200+32, /*!< embedded signature */
+    OPS_PTAG_SS_ISSUER_FINGERPRINT=0x200+33, /*!< Issuer fingerprint */
 
     OPS_PTAG_SS_USERDEFINED00	=0x200+100, /*!< internal or user-defined */
     OPS_PTAG_SS_USERDEFINED01	=0x200+101, 

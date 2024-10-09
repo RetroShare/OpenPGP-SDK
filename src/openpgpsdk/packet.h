@@ -463,6 +463,15 @@ typedef union
     } ops_signature_union_t;
 
 #define OPS_KEY_ID_SIZE		8
+#define OPS_FINGERPRINT_SIZE 20
+
+/** ops_fingerprint_t */
+typedef struct
+    {
+    unsigned char 		fingerprint[OPS_FINGERPRINT_SIZE];
+    unsigned			length;
+    } ops_fingerprint_t;
+
 
 /** Struct to hold a signature packet.
  *
@@ -482,6 +491,7 @@ typedef struct
     unsigned char* 		v4_hashed_data;
     ops_boolean_t		creation_time_set:1;
     ops_boolean_t		signer_id_set:1;
+    ops_fingerprint_t   issuer_fingerprint;
     } ops_signature_info_t;
 
 /** Struct used when parsing a signature */
@@ -666,7 +676,7 @@ typedef struct
     {
     unsigned char clss;  /* class - name changed for C++ */
     unsigned char algid;
-    unsigned char fingerprint[20];
+    unsigned char fingerprint[OPS_FINGERPRINT_SIZE];
     } ops_ss_revocation_key_t;
 
 /** Signature Subpacket : Revocation Reason */
@@ -895,6 +905,7 @@ typedef union
     ops_se_ip_data_body_t	se_ip_data_body;
     ops_se_data_body_t		se_data_body;
     ops_get_secret_key_t	get_secret_key;
+    ops_fingerprint_t       ss_issuer_fingerprint;
     } ops_parser_content_union_t;
 
 /** ops_parser_content_t */
@@ -904,13 +915,6 @@ struct ops_parser_content_t
     unsigned char		critical; /* for signature subpackets */
     ops_parser_content_union_t 	content;
     };
-
-/** ops_fingerprint_t */
-typedef struct
-    {
-    unsigned char 		fingerprint[20];
-    unsigned			length;
-    } ops_fingerprint_t;
 
 void ops_init(void);
 void ops_finish(void);
