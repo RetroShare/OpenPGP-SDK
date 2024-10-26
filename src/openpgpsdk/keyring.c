@@ -558,7 +558,7 @@ void ops_add_signed_userid_to_keydata(ops_keydata_t* keydata, const ops_user_id_
 \param userid Self-signed User ID to add
 \return ops_true if OK; else ops_false
 */
-ops_boolean_t ops_add_selfsigned_userid_to_keydata(ops_keydata_t* keydata, ops_user_id_t* userid)
+ops_boolean_t ops_add_selfsigned_userid_to_keydata(ops_keydata_t* keydata, ops_user_id_t* userid,ops_hash_algorithm_t hash_alg)
     {
     ops_packet_t sigpacket;
 
@@ -581,7 +581,7 @@ ops_boolean_t ops_add_selfsigned_userid_to_keydata(ops_keydata_t* keydata, ops_u
     // create sig for this pkt
 
     sig=ops_create_signature_new();
-    ops_signature_start_key_signature(sig, &keydata->key.skey.public_key, userid, OPS_CERT_POSITIVE);
+    ops_signature_start_key_signature(sig, &keydata->key.skey.public_key, userid, hash_alg,OPS_CERT_POSITIVE);
     ops_signature_add_creation_time(sig,time(NULL));
     ops_signature_add_issuer_key_id(sig,keydata->key_id);
     ops_signature_add_primary_user_id(sig, ops_true);
@@ -613,7 +613,7 @@ ops_boolean_t ops_add_selfsigned_userid_to_keydata(ops_keydata_t* keydata, ops_u
 \brief Add signature to given key
 \return ops_true if OK; else ops_false
 */
-ops_boolean_t ops_sign_key(ops_keydata_t* keydata, const unsigned char *signers_key_id,ops_secret_key_t *signers_key)
+ops_boolean_t ops_sign_key(ops_keydata_t* keydata, const unsigned char *signers_key_id,ops_secret_key_t *signers_key,ops_hash_algorithm_t hash_alg)
 {
 /*	ops_memory_t* mem_userid=NULL; */
 	ops_memory_t* mem_sig=NULL;
@@ -628,7 +628,7 @@ ops_boolean_t ops_sign_key(ops_keydata_t* keydata, const unsigned char *signers_
 	// create sig for this pkt
 
 	sig=ops_create_signature_new();
-	ops_signature_start_key_signature(sig, &keydata->key.skey.public_key, &keydata->uids[0], OPS_CERT_GENERIC);
+    ops_signature_start_key_signature(sig, &keydata->key.skey.public_key, &keydata->uids[0],hash_alg, OPS_CERT_GENERIC);
 	ops_signature_add_creation_time(sig,time(NULL)); 
 	ops_signature_add_issuer_key_id(sig,signers_key_id);
 	ops_signature_hashed_subpackets_end(sig);

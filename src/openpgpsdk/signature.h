@@ -62,9 +62,9 @@ ops_check_hash_signature(ops_hash_t *hash,
 			 const ops_signature_t *sig,
 			 const ops_public_key_t *signer);
 void ops_signature_start_key_signature(ops_create_signature_t *sig,
-				       const ops_public_key_t *key,
-				       const ops_user_id_t *id,
-				       ops_sig_type_t type);
+                       const ops_public_key_t *key,
+                       const ops_user_id_t *id, ops_hash_algorithm_t hash_alg,
+                       ops_sig_type_t type);
 void ops_signature_start_cleartext_signature(ops_create_signature_t *sig,
 					     const ops_secret_key_t *key,
 					     const ops_hash_algorithm_t hash,
