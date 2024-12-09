@@ -734,6 +734,7 @@ static void start_signature_in_mem(ops_create_signature_t *sig)
 void ops_signature_start_key_signature(ops_create_signature_t *sig,
 				       const ops_public_key_t *key,
 				       const ops_user_id_t *id,
+                       ops_hash_algorithm_t hash_alg,
 				       ops_sig_type_t type)
     {
     sig->info=ops_create_info_new();
@@ -742,7 +743,7 @@ void ops_signature_start_key_signature(ops_create_signature_t *sig,
     // use the buffered writer to construct packets (done), and also should
     // share code for hash calculation)
     sig->sig.info.version=OPS_V4;
-    sig->sig.info.hash_algorithm=OPS_HASH_SHA1;
+    sig->sig.info.hash_algorithm=hash_alg;
     sig->sig.info.key_algorithm=key->algorithm;
     sig->sig.info.type=type;
 

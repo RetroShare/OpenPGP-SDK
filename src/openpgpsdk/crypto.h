@@ -176,7 +176,7 @@ extern ops_boolean_t ops_encrypt_stream(ops_create_info_t* cinfo, const ops_keyd
 ops_boolean_t ops_decrypt_memory(const unsigned char *encrypted_memory,int em_length, unsigned char **decrypted_memory,int *out_length, ops_keyring_t* keyring, const ops_boolean_t use_armour, ops_parse_cb_t* cb_get_passphrase) ;
 // Keys
 ops_boolean_t ops_rsa_generate_keypair(const int numbits, const unsigned long e, ops_keydata_t* keydata);
-ops_keydata_t* ops_rsa_create_selfsigned_keypair(const int numbits, const unsigned long e, ops_user_id_t * userid);
+ops_keydata_t* ops_rsa_create_selfsigned_keypair(const int numbits, const unsigned long e, ops_user_id_t * userid, ops_hash_algorithm_t hash_alg);
 
 int ops_dsa_size(const ops_dsa_public_key_t *dsa);
 DSA_SIG* ops_dsa_sign(unsigned char* hashbuf, unsigned hashsize, const ops_dsa_secret_key_t *sdsa, const ops_dsa_public_key_t *dsa);

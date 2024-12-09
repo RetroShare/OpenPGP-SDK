@@ -836,7 +836,7 @@ ops_boolean_t ops_rsa_generate_keypair(const int numbits, const unsigned long e,
 
 /**
  \ingroup HighLevel_KeyGenerate
- \brief Creates a self-signed RSA keypair
+ \brief Creates a self-signed RSA keypair using the hash algorithm for the self-signature.
  \param numbits Modulus size
  \param e Public Exponent
  \param userid User ID
@@ -846,21 +846,41 @@ ops_boolean_t ops_rsa_generate_keypair(const int numbits, const unsigned long e,
  \sa ops_rsa_generate_keypair()
  \sa ops_keydata_free()
 */
-ops_keydata_t* ops_rsa_create_selfsigned_keypair(const int numbits, const unsigned long e, ops_user_id_t * userid)
-    {
+ops_keydata_t* ops_rsa_create_selfsigned_keypair(const int numbits, const unsigned long e, ops_user_id_t * userid,ops_hash_algorithm_t hash_alg)
+{
     ops_keydata_t *keydata=NULL;
+
+    switch(hash_alg)
+    {
+    // Valid hash algorithms
+
+    case OPS_HASH_RIPEMD:
+    case OPS_HASH_SHA256:
+    case OPS_HASH_SHA384:
+    case OPS_HASH_SHA512:
+    case OPS_HASH_SHA224:
+        break;
+
+    // Unsupported/Insecure algorithms
+
+    case OPS_HASH_MD5:
+    case OPS_HASH_SHA1:
+        fprintf(stderr,"***\n***\nWARNING: chosen hash algorithm (%d) is insecure. Try OPS_HASH_SHA256 preferably.\n***\n",hash_alg);
+        return NULL;
+    default:
+        break;
+    }
 
     keydata=ops_keydata_new();
 
-    if (ops_rsa_generate_keypair(numbits, e, keydata) != ops_true
-        || ops_add_selfsigned_userid_to_keydata(keydata, userid) != ops_true)
-        {
+    if (ops_rsa_generate_keypair(numbits, e, keydata) != ops_true || ops_add_selfsigned_userid_to_keydata(keydata, userid,hash_alg) != ops_true)
+    {
         ops_keydata_free(keydata);
         return NULL;
-        }
+    }
 
     return keydata;
-    }
+}
 
 /*
 int ops_dsa_size(const ops_dsa_public_key_t *dsa)
