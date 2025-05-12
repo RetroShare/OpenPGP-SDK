@@ -475,11 +475,11 @@ static void print_duration(char *name, time_t time)
     printf("\n");
     }
 
-static void print_boolean(const char *name, unsigned char bool)
+static void print_boolean(const char *name, unsigned char bool_)
     {
     print_name(name);
 
-    if(bool)
+    if(bool_)
 	printf("Yes");
     else
 	printf("No");

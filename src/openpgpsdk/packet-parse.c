@@ -1512,7 +1512,7 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
     ops_parser_content_t content;
     unsigned t8,t7;
     ops_boolean_t read=ops_true;
-    unsigned char bool[1]="";
+    unsigned char bool_[1]="";
 
     ops_init_subregion(&subregion,region);
     if(!limited_read_new_length(&subregion.length,region,pinfo))
@@ -1569,9 +1569,9 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
 	break;
 
     case OPS_PTAG_SS_REVOCABLE:
-	if(!limited_read(bool,1,&subregion,pinfo))
+	if(!limited_read(bool_,1,&subregion,pinfo))
 	    return 0;
-	C.ss_revocable.revocable=!!bool[0];
+	C.ss_revocable.revocable=!!bool_[0];
 	break;
 
     case OPS_PTAG_SS_ISSUER_KEY_ID:
@@ -1598,9 +1598,9 @@ static int parse_one_signature_subpacket(ops_signature_t *sig,
 	break;
 			    	
     case OPS_PTAG_SS_PRIMARY_USER_ID:
-	if(!limited_read (bool,1,&subregion,pinfo))
+	if(!limited_read (bool_,1,&subregion,pinfo))
 	    return 0;
-	C.ss_primary_user_id.primary_user_id = !!bool[0];
+	C.ss_primary_user_id.primary_user_id = !!bool_[0];
 	break;
  
     case OPS_PTAG_SS_KEY_FLAGS:
