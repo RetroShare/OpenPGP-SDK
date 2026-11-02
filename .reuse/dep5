@@ -7,3 +7,11 @@ Copyright: 2005-2008, Ben Laurie
            2005-2008, Rachel Willmer
            2008-2022, Retroshare Team <contact@retroshare.cc>
 License: Apache-2.0
+
+Files: CMakeLists.txt
+       src/openpgpsdk.pro
+       src/use_openpgpsdk.pri
+Copyright: 2004-2019, Retroshare Team <contact@retroshare.cc>
+           2021, Gioacchino Mazzurco <gio@eigenlab.org>
+License: CC0-1.0
+Comment: build files that carry their own SPDX tag.
